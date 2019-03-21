@@ -44,6 +44,7 @@ import java.util.ArrayList;
          }
      });
      private ArrayList<String> mPaths;
+     private int currentPosition = 0;
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,8 +111,8 @@ import java.util.ArrayList;
          }.start();
      }
 
-     /*
-        开始加载图片，在从服务器获取完毕资源路径之后执行
+     /**
+      * 开始加载图片，在从服务器获取完毕资源路径之后执行
       */
      private void beginLoadImage() {
          try {
@@ -125,9 +126,24 @@ import java.util.ArrayList;
              }
              fis.close();
 
+             loadImageByPath(mPaths.get(currentPosition));
+
          } catch (Exception e) {
              e.printStackTrace();
          }
+     }
+
+     /**
+      * 通过路径加载图片
+      * @param path
+      */
+     private void loadImageByPath(String path) {
+        new Thread(){
+            @Override
+            public void run() {
+
+            }
+        }.start();
      }
 
      public void pre(View view) {
