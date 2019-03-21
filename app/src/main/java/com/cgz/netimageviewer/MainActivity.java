@@ -150,7 +150,30 @@ import java.util.ArrayList;
                     msg.what = LOAD_IMAGE;
                     msg.obj = BitmapFactory.decodeFile(file.getAbsolutePath());
                     mHandler.sendMessage(msg);
-                } else {
+                } else {//没有缓存的话，就需要去下载
+                    System.out.println("通过访问网络把图片资源获取出来");
+                    try {
+                        URL url = new URL(path);
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("GET");
+                        int code = conn.getResponseCode();
+
+                        if (code == 200) {
+
+                        } else {
+                            Message msg = Message.obtain();
+                            msg.what = LOAD_ERROR;
+                            msg.obj = "获取图片失败,返回码"+code ;
+                            mHandler.sendMessage(msg);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Message msg = Message.obtain();
+                        msg.what = LOAD_ERROR;
+                        msg.obj = "获取图片失败";
+                        mHandler.sendMessage(msg);
+                    }
 
                 }
             }
