@@ -1,5 +1,7 @@
  package com.cgz.netimageviewer;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -137,11 +139,20 @@ import java.util.ArrayList;
       * 通过路径加载图片
       * @param path
       */
-     private void loadImageByPath(String path) {
+     private void loadImageByPath(final String path) {
         new Thread(){
             @Override
             public void run() {
+                File file = new File(getCacheDir(), path.replace("/", "") + ".jpg");
+                if (file.exists() && file.length() > 0) { //有缓存
+                    System.out.println("通过缓存把图片显示出来...");
+                    Message msg = Message.obtain();
+                    msg.what = LOAD_IMAGE;
+                    msg.obj = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    mHandler.sendMessage(msg);
+                } else {
 
+                }
             }
         }.start();
      }
