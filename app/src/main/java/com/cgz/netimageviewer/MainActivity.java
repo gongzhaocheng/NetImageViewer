@@ -7,13 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
  public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +43,7 @@ import java.net.URLConnection;
              return false;
          }
      });
+     private ArrayList<String> mPaths;
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,7 @@ import java.net.URLConnection;
 
                          System.out.println("code = 200");
                          //获取所有链接之后，就要去加载图片
+                         beginLoadImage();
 
                      } else if (code == 404){// 资源未找到
                          Message msg = Message.obtain();
@@ -101,6 +108,26 @@ import java.net.URLConnection;
 
              }
          }.start();
+     }
+
+     /*
+        开始加载图片，在从服务器获取完毕资源路径之后执行
+      */
+     private void beginLoadImage() {
+         try {
+             mPaths = new ArrayList<>();
+             File file = new File(getCacheDir(), "info.txt");
+             FileInputStream fis = new FileInputStream(file);
+             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+             String line;
+             while ((line = br.readLine()) != null) {
+                 mPaths.add(line);
+             }
+             fis.close();
+
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
      }
 
      public void pre(View view) {
