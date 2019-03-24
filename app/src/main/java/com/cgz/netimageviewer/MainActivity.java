@@ -198,9 +198,30 @@ import java.util.ArrayList;
         }.start();
      }
 
+     /**
+      * 上一张图片
+      *
+      * @param view
+      */
      public void pre(View view) {
+         currentPosition--;
+         if (currentPosition < 0) {
+             currentPosition = mPaths.size() - 1;
+         }
+         loadImageByPath(mPaths.get(currentPosition));
      }
 
+
+     /**
+      * 下一张图片
+      *
+      * @param view
+      */
      public void next(View view) {
+         currentPosition++;
+         if (currentPosition == mPaths.size()) {
+             currentPosition = 0;
+         }
+         loadImageByPath(mPaths.get(currentPosition));
      }
  }
