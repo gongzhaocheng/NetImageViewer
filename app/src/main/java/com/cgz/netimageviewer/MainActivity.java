@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 
  public class MainActivity extends AppCompatActivity {
 
-     private View mIv;
+     private ImageView mIv;
 
      private static final int LOAD_ERROR = 2;
      private static final int LOAD_IMAGE = 1;
@@ -33,7 +34,9 @@ import java.util.ArrayList;
          public boolean handleMessage(Message msg) {
              switch (msg.what) {
                  case LOAD_IMAGE:
-
+                     Bitmap bitMap = (Bitmap) msg.obj;
+                     mIv.setImageBitmap(bitMap);
+                     Toast.makeText(MainActivity.this,"加载图片成功",Toast.LENGTH_SHORT).show();
                      break;
                  case LOAD_ERROR:
                      System.out.println("LOAD_ERROR 加载失败");
@@ -159,7 +162,22 @@ import java.util.ArrayList;
                         int code = conn.getResponseCode();
 
                         if (code == 200) {
+                            InputStream is = conn.getInputStream();
 
+                            // 内存中的图片
+                            Bitmap bitmap = BitmapFactory.decodeStream(is);
+
+                            // 将文件写入到本地file文件
+                            FileOutputStream fos = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
+                            fos.close();
+                            is.close();
+
+                            Message msg = Message.obtain();
+                            msg.what = LOAD_IMAGE;
+                            //解析一个文件，保存为bitMap对象
+                            msg.obj = BitmapFactory.decodeFile(file.getAbsolutePath());
+                            mHandler.sendMessage(msg);
                         } else {
                             Message msg = Message.obtain();
                             msg.what = LOAD_ERROR;
