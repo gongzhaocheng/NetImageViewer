@@ -69,7 +69,7 @@ import java.util.ArrayList;
 
                  try {
                      // 1.得到服务器资源的路径
-                     URL url = new URL("http://192.168.102.115:80/img/gaga.html");
+                     URL url = new URL("http://192.168.102.115:8080/Day10/img/gaga.html");
                      // 2.通过这个路径打开浏览器链接
                      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                      // 3.设置请求方式为GET
